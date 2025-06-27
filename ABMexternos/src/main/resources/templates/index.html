@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>App con Botonera</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div>
+    <button onclick="location.href='/?view=buscar'">Buscar</button>
+    <button onclick="location.href='/?view=nuevo'">Nuevo</button>
+    <button onclick="location.href='/?view=modificar'">Modificar</button>
+</div>
+
+<hr>
+
+<div th:replace="fragments/fragments :: ${partialView}"></div>
+
+</body>
+</html>

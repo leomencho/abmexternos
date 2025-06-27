@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="default">
+  <h2>¡Bienvenido!</h2>
+  <img src="/images/welcome.png" alt="Bienvenida" style="width: 80%; max-width: 800px; border-radius: 10px;">
+  <p>Usá la botonera de arriba para comenzar.</p>
+</div>
+
+
+<div th:fragment="buscar">
+  <div class="container mt-4">
+    <h2 class="mb-4">Buscar Registro</h2>
+    <form method="get" action="/buscar" class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Apellido</label>
+        <input type="text" name="apellido" class="form-control" placeholder="Ingrese Apellido">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="nombre" class="form-control" placeholder="Ingrese Nombre">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Programa</label>
+        <input type="text" name="programa" class="form-control" placeholder="Programa">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Estado</label>
+        <input type="text" name="estado" class="form-control" placeholder="Activo, Inactivo...">
+      </div>
+
+      <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+
+<div th:fragment="nuevo">
+  <div class="container mt-4">
+    <h2 class="mb-4">Nuevo Registro</h2>
+    <form method="post" action="/modificar" enctype="multipart/form-data" class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="nombre" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Apellido</label>
+        <input type="text" name="apellido" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">DNI</label>
+        <input type="text" name="dni" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">CUIL</label>
+        <input type="text" name="cuil" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Fecha de Nacimiento</label>
+        <input type="date" name="fecha_nac" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" name="mail" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Programa</label>
+        <input type="text" name="programa" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Función</label>
+        <input type="text" name="funcion" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Reporta a</label>
+        <input type="text" name="reporta" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Foto</label>
+        <input type="file" name="foto" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Seguro</label>
+        <input type="text" name="seguro" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Recursos</label>
+        <input type="text" name="recursos" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Estado</label>
+        <input type="text" name="estado" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Perfil</label>
+        <input type="text" name="perfil" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Contraseña</label>
+        <input type="password" name="pass" class="form-control" required>
+      </div>
+
+      <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<div th:fragment="modificar">
+  <div class="container mt-4">
+    <h2 class="mb-4">Modificar Registro</h2>
+    <form method="post" action="/modificar" enctype="multipart/form-data" class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="nombre" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Apellido</label>
+        <input type="text" name="apellido" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">DNI</label>
+        <input type="text" name="dni" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">CUIL</label>
+        <input type="text" name="cuil" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Fecha de Nacimiento</label>
+        <input type="date" name="fecha_nac" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" name="mail" class="form-control" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Programa</label>
+        <input type="text" name="programa" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Función</label>
+        <input type="text" name="funcion" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Reporta a</label>
+        <input type="text" name="reporta" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Foto</label>
+        <input type="file" name="foto" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Seguro</label>
+        <input type="text" name="seguro" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Recursos</label>
+        <input type="text" name="recursos" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Estado</label>
+        <input type="text" name="estado" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Perfil</label>
+        <input type="text" name="perfil" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Contraseña</label>
+        <input type="password" name="pass" class="form-control" required>
+      </div>
+
+      <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
