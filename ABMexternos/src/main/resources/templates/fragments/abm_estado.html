@@ -1,0 +1,38 @@
+<div class="container mt-4">
+    <h3>Gestión de Estados</h3>
+
+    <form th:action="@{/estados/guardar}" method="post" class="row g-3">
+        <input type="hidden" th:field="*{estado.idestado}" name="idestado" />
+
+        <div class="col-md-6">
+            <label class="form-label">Tipo de Estado</label>
+            <input type="text" class="form-control" name="tipoestado" th:value="${estado.tipoestado}" required />
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo de Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="e : ${estados}">
+            <td th:text="${e.idestado}"></td>
+            <td th:text="${e.tipoestado}"></td>
+            <td>
+                <a th:href="@{/estados/editar/{id}(id=${e.idestado})}" class="btn btn-sm btn-warning">✏️</a>
+                <a th:href="@{/estados/eliminar/{id}(id=${e.idestado})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este estado?')">🗑️</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

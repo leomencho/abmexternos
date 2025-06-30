@@ -1,0 +1,38 @@
+<div class="container mt-4">
+    <h3>Gestión de Perfiles</h3>
+
+    <form th:action="@{/perfiles/guardar}" method="post" class="row g-3">
+        <input type="hidden" th:field="*{perfil.idperfil}" name="idperfil" />
+
+        <div class="col-md-6">
+            <label class="form-label">Tipo de Perfil</label>
+            <input type="text" class="form-control" name="tipoperfil" th:value="${perfil.tipoperfil}" required />
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo de Perfil</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${perfiles}">
+            <td th:text="${p.idperfil}"></td>
+            <td th:text="${p.tipoperfil}"></td>
+            <td>
+                <a th:href="@{/perfiles/editar/{id}(id=${p.idperfil})}" class="btn btn-sm btn-warning">✏️</a>
+                <a th:href="@{/perfiles/eliminar/{id}(id=${p.idperfil})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este perfil?')">🗑️</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

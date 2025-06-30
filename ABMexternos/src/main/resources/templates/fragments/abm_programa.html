@@ -1,0 +1,51 @@
+<div class="container mt-4">
+    <h3>Gestión de Programas</h3>
+
+    <form th:action="@{/programas/guardar}" method="post" class="row g-3">
+        <input type="hidden" th:field="*{programa.idprograma}" name="idprograma" />
+
+        <div class="col-md-4">
+            <label class="form-label">Nombre Corto</label>
+            <input type="text" class="form-control" name="nombreCorto" th:value="${programa.nombreCorto}" required />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" th:value="${programa.nombre}" required />
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" name="observaciones" rows="3" th:text="${programa.observaciones}"></textarea>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <h5>Listado de Programas</h5>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre Corto</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${programas}">
+            <td th:text="${p.idprograma}">1</td>
+            <td th:text="${p.nombreCorto}">NC</td>
+            <td th:text="${p.nombre}">Nombre</td>
+            <td>
+                <a th:href="@{/programas/editar/{id}(id=${p.idprograma})}" class="btn btn-sm btn-warning">✏️</a>
+                <a th:href="@{/programas/eliminar/{id}(id=${p.idprograma})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este programa?')">🗑️</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

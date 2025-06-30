@@ -1,0 +1,45 @@
+<div class="container mt-4">
+    <h3>Gestión de Funciones</h3>
+
+    <form th:action="@{/funciones/guardar}" method="post" class="row g-3">
+        <input type="hidden" th:field="*{funcion.idfunciones}" name="idfunciones" />
+
+        <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" th:value="${funcion.nombre}" required />
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" name="observaciones" rows="3" th:text="${funcion.observaciones}"></textarea>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${funciones}">
+            <td th:text="${f.idfunciones}"></td>
+            <td th:text="${f.nombre}"></td>
+            <td th:text="${f.observaciones}"></td>
+            <td>
+                <a th:href="@{/funciones/editar/{id}(id=${f.idfunciones})}" class="btn btn-sm btn-warning">✏️</a>
+                <a th:href="@{/funciones/eliminar/{id}(id=${f.idfunciones})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar esta función?')">🗑️</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
