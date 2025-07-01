@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Buscar Registro</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h2 class="mb-4">Buscar Registro</h2>
+
+        <form method="get" action="/buscar" class="row g-3">
+
+            <!-- Apellido -->
+            <div class="col-md-6">
+                <label class="form-label">Apellido</label>
+                <input type="text" name="apellido" class="form-control" placeholder="Ingrese Apellido" maxlength="50">
+            </div>
+
+            <!-- Nombre -->
+            <div class="col-md-6">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Ingrese Nombre" maxlength="50">
+            </div>
+
+            <!-- Programa -->
+            <div class="col-md-6">
+                <label class="form-label">Programa</label>
+                <select name="programa" class="form-select">
+                    <option value="" selected disabled>Seleccione Programa</option>
+                    <option th:each="p : ${programas}" th:value="${p.id}" th:text="${p.nombre}"></option>
+                </select>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-6">
+                <label class="form-label">Estado</label>
+                <select name="estado" class="form-select">
+                    <option value="" selected disabled>Seleccione Estado</option>
+                    <option value="activo">Activo</option>
+                    <option value="desactivado">Desactivado</option>
+                    <option value="pausado">Pausado</option>
+                    <option value="pre-aprobado">Pre-Aprobado</option>
+                </select>
+            </div>
+
+            <!-- Botón de búsqueda -->
+            <div class="col-12 mt-4 text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5">Buscar</button>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

@@ -1,51 +1,75 @@
-<div class="container mt-4">
-    <h3>Gestión de Programas</h3>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Gestión de Programas</title>
+</head>
 
-    <form th:action="@{/programas/guardar}" method="post" class="row g-3">
-        <input type="hidden" th:field="*{programa.idprograma}" name="idprograma" />
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
 
-        <div class="col-md-4">
-            <label class="form-label">Nombre Corto</label>
-            <input type="text" class="form-control" name="nombreCorto" th:value="${programa.nombreCorto}" required />
+        <!-- Formulario -->
+        <div class="card shadow-sm rounded-4 p-4 mb-4">
+            <h4 class="text-primary mb-4">📺 Gestión de Programas</h4>
+
+            <form th:action="@{/programas/guardar}" method="post" class="row g-4">
+                <input type="hidden" th:field="*{programa.idprograma}" name="idprograma" />
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Nombre Corto</label>
+                    <input type="text" class="form-control" name="nombreCorto" th:value="${programa.nombreCorto}" required />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" th:value="${programa.nombre}" required />
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">Observaciones</label>
+                    <textarea class="form-control" name="observaciones" rows="3" th:text="${programa.observaciones}"></textarea>
+                </div>
+
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success px-4">
+                        💾 Guardar
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <div class="col-md-4">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" name="nombre" th:value="${programa.nombre}" required />
+        <!-- Tabla -->
+        <div class="card shadow-sm rounded-4 p-4">
+            <h5 class="text-secondary mb-3">📋 Listado de Programas</h5>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Corto</th>
+                        <th>Nombre</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p : ${programas}">
+                        <td th:text="${p.idprograma}">1</td>
+                        <td th:text="${p.nombreCorto}">NC</td>
+                        <td th:text="${p.nombre}">Nombre</td>
+                        <td class="text-center">
+                            <a th:href="@{/programas/editar/{id}(id=${p.idprograma})}" class="btn btn-sm btn-warning me-1 rounded-circle" title="Editar">✏️</a>
+                            <a th:href="@{/programas/eliminar/{id}(id=${p.idprograma})}" class="btn btn-sm btn-danger rounded-circle" title="Eliminar"
+                               onclick="return confirm('¿Eliminar este programa?')">🗑️</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="col-md-12">
-            <label class="form-label">Observaciones</label>
-            <textarea class="form-control" name="observaciones" rows="3" th:text="${programa.observaciones}"></textarea>
-        </div>
-
-        <div class="col-12">
-            <button type="submit" class="btn btn-success">Guardar</button>
-        </div>
-    </form>
-
-    <hr>
-
-    <h5>Listado de Programas</h5>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre Corto</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="p : ${programas}">
-            <td th:text="${p.idprograma}">1</td>
-            <td th:text="${p.nombreCorto}">NC</td>
-            <td th:text="${p.nombre}">Nombre</td>
-            <td>
-                <a th:href="@{/programas/editar/{id}(id=${p.idprograma})}" class="btn btn-sm btn-warning">✏️</a>
-                <a th:href="@{/programas/eliminar/{id}(id=${p.idprograma})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este programa?')">🗑️</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    </div>
+</section>
+</body>
+</html>

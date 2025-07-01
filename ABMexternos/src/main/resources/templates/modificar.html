@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Modificar Usuario</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h2 class="mb-4">Modificar Usuario</h2>
+
+        <form method="post" action="/modificar" enctype="multipart/form-data" class="row g-3">
+
+            <!-- Nombre y Apellido -->
+            <div class="col-md-6">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" th:value="${usuario.nombre}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Apellido</label>
+                <input type="text" name="apellido" class="form-control" th:value="${usuario.apellido}" required>
+            </div>
+
+            <!-- DNI y CUIL -->
+            <div class="col-md-6">
+                <label class="form-label">DNI</label>
+                <input type="text" name="dni" class="form-control" th:value="${usuario.dni}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">CUIL</label>
+                <input type="text" name="cuil" class="form-control" th:value="${usuario.cuil}" required>
+            </div>
+
+            <!-- Fecha de Nacimiento y Email -->
+            <div class="col-md-6">
+                <label class="form-label">Fecha de Nacimiento</label>
+                <input type="date" name="fecha_nac" class="form-control" th:value="${usuario.fechaNacimiento}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="mail" class="form-control" th:value="${usuario.mail}" required>
+            </div>
+
+            <!-- Programa y Función -->
+            <div class="col-md-6">
+                <label class="form-label">Programa</label>
+                <select name="programa" class="form-select">
+                    <option th:each="p : ${programas}" th:value="${p.id}" th:text="${p.nombre}"
+                            th:selected="${p.id == usuario.programa?.id}"></option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Función</label>
+                <select name="funcion" class="form-select">
+                    <option th:each="f : ${funciones}" th:value="${f.id}" th:text="${f.nombre}"
+                            th:selected="${f.id == usuario.funcion?.id}"></option>
+                </select>
+            </div>
+
+            <!-- Reporta a -->
+            <div class="col-md-6">
+                <label class="form-label">Reporta a</label>
+                <select name="reporta" class="form-select">
+                    <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre + ' ' + u.apellido}"
+                            th:selected="${u.id == usuario.reporta?.id}"></option>
+                </select>
+            </div>
+
+            <!-- Foto -->
+            <div class="col-md-6">
+                <label class="form-label">Foto</label>
+                <input type="file" name="foto" class="form-control">
+            </div>
+
+            <!-- Seguro -->
+            <div class="col-md-6">
+                <label class="form-label">Seguro</label>
+                <input type="text" name="seguro" class="form-control" th:value="${usuario.seguro}">
+            </div>
+
+            <!-- Recursos -->
+            <div class="col-md-6">
+                <label class="form-label">Recursos</label>
+                <input type="text" name="recursos" class="form-control" th:value="${usuario.recursos}">
+            </div>
+
+            <!-- Estado, Perfil y Contraseña -->
+            <div class="col-md-4">
+                <label class="form-label">Estado</label>
+                <select name="estado" class="form-select">
+                    <option value="activo" th:selected="${usuario.estado == 'activo'}">Activo</option>
+                    <option value="desactivado" th:selected="${usuario.estado == 'desactivado'}">Desactivado</option>
+                    <option value="pausado" th:selected="${usuario.estado == 'pausado'}">Pausado</option>
+                    <option value="pre-aprobado" th:selected="${usuario.estado == 'pre-aprobado'}">Pre-Aprobado</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Perfil</label>
+                <select name="perfil" class="form-select">
+                    <option value="admin" th:selected="${usuario.perfil == 'admin'}">Admin</option>
+                    <option value="rrhh" th:selected="${usuario.perfil == 'rrhh'}">RRHH</option>
+                    <option value="usuario" th:selected="${usuario.perfil == 'usuario'}">Usuario</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Contraseña</label>
+                <input type="password" name="pass" class="form-control" th:value="${usuario.pass}" required>
+            </div>
+
+            <!-- Botón -->
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
+            </div>
+
+        </form>
+    </div>
+</section>
+</body>
+</html>
