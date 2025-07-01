@@ -1,6 +1,8 @@
 package eldoce.com.ar.ABMexternos.controller;
 
+import eldoce.com.ar.ABMexternos.model.Recurso;
 import eldoce.com.ar.ABMexternos.model.Usuario;
+import eldoce.com.ar.ABMexternos.repository.RecursoRepository;
 import eldoce.com.ar.ABMexternos.repository.UsuarioRepository;
 import eldoce.com.ar.ABMexternos.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,12 @@ public class UsuarioController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private RecursoRepository recursoRepository;
+
+
     // ✅ Crear usuario
-    @PostMapping
+    @PostMapping("/simple")
     public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
         Usuario guardado = usuarioRepository.save(usuario);
         fileStorageService.createUserDirectory(guardado.getIdUsuarios());
@@ -78,22 +84,21 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping()
     public ResponseEntity<?> crearConArchivos(
-            @RequestParam("foto") MultipartFile foto,
+            //@RequestParam(value = "foto", required = false) MultipartFile foto,
             @RequestParam("nombre") String nombre,
             @RequestParam("apellido") String apellido,
             @RequestParam("dni") String dni,
             @RequestParam("cuil") String cuil,
             @RequestParam("fecha_nac") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimiento,
             @RequestParam("mail") String mail,
-            @RequestParam("pass") String pass,
-            @RequestParam(value = "recursos", required = false) List<String> recursos,
-            @RequestParam(value = "archivoSeguro", required = false) List<MultipartFile> archivoSeguro
-            // Agregá aquí otros campos si hace falta: funciones, perfiles, etc.
+            @RequestParam("pass") String pass
+            //@RequestParam(value = "recursos", required = false) List<String> recursos,
+            //@RequestParam(value = "archivoSeguro", required = false) List<MultipartFile> archivoSeguro
+            // Otros campos como programa, función, etc.
     ) {
         try {
-            // 1. Crear usuario básico
             Usuario nuevo = new Usuario();
             nuevo.setNombre(nombre);
             nuevo.setApellido(apellido);
@@ -102,20 +107,36 @@ public class UsuarioController {
             nuevo.setFechaNacimiento(fechaNacimiento);
             nuevo.setMail(mail);
             nuevo.setPass(pass);
-            // Otros campos como funciones, programas, reporta... deberías cargarlos desde sus IDs
+            //nuevo.setRecursos(recursos != null ? recursos : List.of()); // evita null
+
+            /*if (recursos != null && !recursos.isEmpty()) {
+                List<Recurso> recursosEntidad = recursos.stream()
+                        .map(n -> recursoRepository.findByNombre(n)
+                                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado: " + n)))
+                        .toList();
+
+                nuevo.setRecursos(recursosEntidad);
+            }*/
+
 
             Usuario guardado = usuarioRepository.save(nuevo);
 
-            // 2. Crear carpeta y guardar la imagen
-            String pathFoto = fileStorageService.saveUserImage(guardado.getIdUsuarios(), foto);
-            guardado.setFoto(pathFoto);
+            // Solo si hay foto y no está vacía
+            /*if (foto != null && !foto.isEmpty()) {
+                String pathFoto = fileStorageService.saveUserImage(guardado.getIdUsuarios(), foto);
+                guardado.setFoto(pathFoto);
+            } else {
+                guardado.setFoto("/default-avatar.png"); // o null, o lo que uses por defecto
+            }*/
 
-            // 3. Guardar PDFs del seguro
-            if (archivoSeguro != null) {
+            // Solo si hay PDF de seguro
+            /*if (archivoSeguro != null) {
                 for (MultipartFile file : archivoSeguro) {
-                    fileStorageService.saveUserPdf(guardado.getIdUsuarios(), file);
+                    if (file != null && !file.isEmpty()) {
+                        fileStorageService.saveUserPdf(guardado.getIdUsuarios(), file);
+                    }
                 }
-            }
+            }*/
 
             usuarioRepository.save(guardado);
             return ResponseEntity.ok("Usuario creado correctamente");
@@ -124,5 +145,6 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body("Error al crear usuario: " + e.getMessage());
         }
     }
+
 
 }

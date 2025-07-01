@@ -11,9 +11,9 @@
   <div class="container mt-4">
     <h2 class="mb-4">Nuevo Registro</h2>
 
-    <form method="post" action="/api/usuarios" enctype="multipart/form-data" class="row g-3">
+    <form method="post" action="/api/usuarios" class="row g-3">
 
-      <!-- Foto con preview -->
+      <!-- Foto con preview --> <!--
       <div class="col-12 text-center">
         <label class="form-label d-block">Foto de Perfil</label>
         <label for="fotoInput">
@@ -21,7 +21,7 @@
                style="width:150px; height:150px; object-fit:cover; cursor:pointer;">
         </label>
         <input type="file" id="fotoInput" name="foto" class="d-none" onchange="previewFoto(this)">
-      </div>
+      </div> -->
 
       <!-- Nombre y Apellido -->
       <div class="col-md-6">
@@ -58,7 +58,8 @@
         <label class="form-label">Programa</label>
         <select name="programa" class="form-select" required>
           <option value="" disabled selected>Seleccione un programa</option>
-          <option th:each="p : ${programas}" th:value="${p.id}" th:text="${p.nombre}"></option>
+          <option th:each="p : ${programas}" th:value="${p.idprograma}" th:text="${p.nombre}"></option>
+
         </select>
       </div>
 
@@ -67,7 +68,7 @@
         <label class="form-label">Función</label>
         <select name="funcion" class="form-select">
           <option value="" disabled selected>Seleccione una función</option>
-          <option th:each="f : ${funciones}" th:value="${f.id}" th:text="${f.nombre}"></option>
+          <option th:each="f : ${funciones}" th:value="${f.idfunciones}" th:text="${f.nombre}"></option>
         </select>
       </div>
 
@@ -76,11 +77,14 @@
         <label class="form-label">Reporta a</label>
         <select name="reporta" class="form-select">
           <option value="" disabled selected>Seleccione un responsable</option>
-          <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre} + ' ' + ${u.apellido}"></option>
-        </select>
-      </div>
+          <!-- <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre} + ' ' + ${u.apellido}"></option> -->
+          <option value="activo">Activo</option>
+          <option value="desactivado">Desactivado</option>
+         </select>
+       </div>
 
-      <!-- Estado, Perfil, Contraseña -->
+
+       <!-- Estado, Perfil, Contraseña -->
       <div class="col-md-3">
         <label class="form-label">Estado</label>
         <select name="estado" class="form-select form-select-sm">
@@ -104,6 +108,7 @@
       </div>
 
       <!-- Recursos -->
+      <!--
       <div class="col-md-12">
         <label class="form-label">Recursos</label>
         <div class="form-check form-check-inline">
@@ -122,9 +127,9 @@
           <input class="form-check-input" type="checkbox" name="recursos" value="Correo" id="recursoCorreo">
           <label class="form-check-label" for="recursoCorreo">Correo</label>
         </div>
-      </div>
+      </div>-->
 
-      <!-- Seguro -->
+      <!-- Seguro --><!--
       <div class="col-12">
         <label class="form-label">Documentación de Seguro</label>
         <div class="row">
@@ -145,7 +150,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
 
       <!-- Botón -->
       <div class="col-12 mt-3">
@@ -166,6 +171,27 @@
       }
     }
   </script>
+  <script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+      const data = new FormData(this);
+      for (const [key, value] of data.entries()) {
+        console.log("🚨 Campo enviado:", key, value);
+      }
+    });
+  </script>
+  <script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+      const inputs = this.querySelectorAll("input[type='file']");
+      inputs.forEach(input => {
+        if (input.name === "attachment") {
+          input.remove(); // borra el input que causa conflicto
+          console.log("❌ Eliminado input 'attachment'");
+        }
+      });
+    });
+  </script>
+
+
 </section>
 </body>
 </html>
