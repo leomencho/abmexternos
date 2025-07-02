@@ -25,26 +25,12 @@
                 <input type="text" name="nombre" class="form-control" placeholder="Ingrese Nombre" maxlength="50">
             </div>
 
-            <!-- Programa -->
+            <!-- DNI -->
             <div class="col-md-6">
-                <label class="form-label">Programa</label>
-                <select name="programa" class="form-select">
-                    <option value="" selected disabled>Seleccione Programa</option>
-                    <option th:each="p : ${programas}" th:value="${p.id}" th:text="${p.nombre}"></option>
-                </select>
+                <label class="form-label">DNI</label>
+                <input type="text" name="dni" class="form-control" placeholder="Ingrese DNI" maxlength="11">
             </div>
 
-            <!-- Estado -->
-            <div class="col-md-6">
-                <label class="form-label">Estado</label>
-                <select name="estado" class="form-select">
-                    <option value="" selected disabled>Seleccione Estado</option>
-                    <option value="activo">Activo</option>
-                    <option value="desactivado">Desactivado</option>
-                    <option value="pausado">Pausado</option>
-                    <option value="pre-aprobado">Pre-Aprobado</option>
-                </select>
-            </div>
 
             <!-- Botón de búsqueda -->
             <div class="col-12 mt-4 text-center">
@@ -52,6 +38,29 @@
             </div>
         </form>
     </div>
+
+    <div class="mt-5">
+        <h4>Resultados</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="u : ${usuarios}">
+                <td th:text="${u.nombre}">Nombre</td>
+                <td th:text="${u.apellido}">Apellido</td>
+                <td th:text="${u.dni}">DNI</td>
+                <td th:text="${u.mail}">Email</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </section>
 </body>
 </html>

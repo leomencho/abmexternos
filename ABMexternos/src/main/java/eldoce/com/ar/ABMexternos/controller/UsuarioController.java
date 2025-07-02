@@ -86,17 +86,16 @@ public class UsuarioController {
 
     @PostMapping()
     public ResponseEntity<?> crearConArchivos(
-            //@RequestParam(value = "foto", required = false) MultipartFile foto,
             @RequestParam("nombre") String nombre,
             @RequestParam("apellido") String apellido,
             @RequestParam("dni") String dni,
             @RequestParam("cuil") String cuil,
             @RequestParam("fecha_nac") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimiento,
             @RequestParam("mail") String mail,
-            @RequestParam("pass") String pass
-            //@RequestParam(value = "recursos", required = false) List<String> recursos,
-            //@RequestParam(value = "archivoSeguro", required = false) List<MultipartFile> archivoSeguro
-            // Otros campos como programa, función, etc.
+            @RequestParam("pass") String pass,
+            @RequestParam("programa") Long programaId,
+            @RequestParam("estado") String estado,
+            @RequestParam("perfil") String perfil
     ) {
         try {
             Usuario nuevo = new Usuario();
@@ -107,44 +106,15 @@ public class UsuarioController {
             nuevo.setFechaNacimiento(fechaNacimiento);
             nuevo.setMail(mail);
             nuevo.setPass(pass);
-            //nuevo.setRecursos(recursos != null ? recursos : List.of()); // evita null
-
-            /*if (recursos != null && !recursos.isEmpty()) {
-                List<Recurso> recursosEntidad = recursos.stream()
-                        .map(n -> recursoRepository.findByNombre(n)
-                                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado: " + n)))
-                        .toList();
-
-                nuevo.setRecursos(recursosEntidad);
-            }*/
-
 
             Usuario guardado = usuarioRepository.save(nuevo);
-
-            // Solo si hay foto y no está vacía
-            /*if (foto != null && !foto.isEmpty()) {
-                String pathFoto = fileStorageService.saveUserImage(guardado.getIdUsuarios(), foto);
-                guardado.setFoto(pathFoto);
-            } else {
-                guardado.setFoto("/default-avatar.png"); // o null, o lo que uses por defecto
-            }*/
-
-            // Solo si hay PDF de seguro
-            /*if (archivoSeguro != null) {
-                for (MultipartFile file : archivoSeguro) {
-                    if (file != null && !file.isEmpty()) {
-                        fileStorageService.saveUserPdf(guardado.getIdUsuarios(), file);
-                    }
-                }
-            }*/
-
-            usuarioRepository.save(guardado);
             return ResponseEntity.ok("Usuario creado correctamente");
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al crear usuario: " + e.getMessage());
         }
     }
+
 
 
 }
