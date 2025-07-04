@@ -17,6 +17,11 @@ public class Usuario {
     private String apellido;
     private String dni;
     private String cuil;
+    private String telefono;
+
+    @Column(length = 500)
+    private String comentario;
+
 
     @Column(name = "fnac")
     private LocalDate fechaNacimiento;
@@ -187,6 +192,22 @@ public class Usuario {
     public void setRecursos(List<Recurso> recursos) {
         this.recursos = recursos;
     }
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
 
     @Override
     public String toString() {
@@ -200,6 +221,8 @@ public class Usuario {
                 ", mail='" + mail + '\'' +
                 ", foto='" + foto + '\'' +
                 ", pass='" + pass + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", comentario='" + comentario + '\'' +
                 ", estadoPrograma=" + estadoPrograma +
                 ", funciones=" + funciones +
                 ", reporta=" + reporta +

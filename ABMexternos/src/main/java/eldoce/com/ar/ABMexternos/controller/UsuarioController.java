@@ -93,9 +93,9 @@ public class UsuarioController {
             @RequestParam("fecha_nac") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimiento,
             @RequestParam("mail") String mail,
             @RequestParam("pass") String pass,
-            @RequestParam("programa") Long programaId,
-            @RequestParam("estado") String estado,
-            @RequestParam("perfil") String perfil
+            @RequestParam("telefono") String telefono,
+            @RequestParam("comentario") String comentario
+            // Eliminamos: programa, estado, perfil, funcion, reporta
     ) {
         try {
             Usuario nuevo = new Usuario();
@@ -106,6 +106,8 @@ public class UsuarioController {
             nuevo.setFechaNacimiento(fechaNacimiento);
             nuevo.setMail(mail);
             nuevo.setPass(pass);
+            nuevo.setTelefono(telefono);
+            nuevo.setComentario(comentario);
 
             Usuario guardado = usuarioRepository.save(nuevo);
             return ResponseEntity.ok("Usuario creado correctamente");
@@ -114,7 +116,6 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body("Error al crear usuario: " + e.getMessage());
         }
     }
-
 
 
 }
