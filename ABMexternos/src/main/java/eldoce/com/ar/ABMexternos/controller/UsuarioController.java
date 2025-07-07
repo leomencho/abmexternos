@@ -1,23 +1,27 @@
 package eldoce.com.ar.ABMexternos.controller;
 
+import eldoce.com.ar.ABMexternos.model.Estado;
 import eldoce.com.ar.ABMexternos.model.Recurso;
 import eldoce.com.ar.ABMexternos.model.Usuario;
+import eldoce.com.ar.ABMexternos.repository.EstadoRepository;
 import eldoce.com.ar.ABMexternos.repository.RecursoRepository;
 import eldoce.com.ar.ABMexternos.repository.UsuarioRepository;
 import eldoce.com.ar.ABMexternos.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
@@ -25,67 +29,25 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private EstadoRepository estadoRepository;
+
+    @Autowired
     private FileStorageService fileStorageService;
 
     @Autowired
     private RecursoRepository recursoRepository;
 
-
-    // ✅ Crear usuario
-    @PostMapping("/simple")
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        Usuario guardado = usuarioRepository.save(usuario);
-        fileStorageService.createUserDirectory(guardado.getIdUsuarios());
-        return ResponseEntity.ok(guardado);
+    // 👉 GET para mostrar la vista "nuevo"
+    @GetMapping("/nuevo")
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        model.addAttribute("estados", estadoRepository.findAll());
+        return "nuevo";
     }
 
-    // ✅ Obtener usuario por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerUsuario(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // ✅ Listar todos los usuarios
-    @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
-    }
-
-    // ✅ Subir imagen JPG o PNG (máx 200 KB)
-    @PostMapping("/{id}/foto")
-    public ResponseEntity<?> subirFoto(@PathVariable Long id,
-                                       @RequestParam("imagen") MultipartFile imagen) {
-        try {
-            String path = fileStorageService.saveUserImage(id, imagen);
-            Usuario usuario = usuarioRepository.findById(id).orElseThrow();
-            usuario.setFoto(path); // guardás la ruta
-            usuarioRepository.save(usuario);
-            return ResponseEntity.ok("Imagen subida exitosamente");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Error al guardar la imagen");
-        }
-    }
-
-    // ✅ Subir archivo PDF
-    @PostMapping("/{id}/pdf")
-    public ResponseEntity<?> subirPdf(@PathVariable Long id,
-                                      @RequestParam("archivo") MultipartFile pdf) {
-        try {
-            fileStorageService.saveUserPdf(id, pdf);
-            return ResponseEntity.ok("PDF subido exitosamente");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Error al guardar el PDF");
-        }
-    }
-
-    @PostMapping()
-    public ResponseEntity<?> crearConArchivos(
+    // ✅ Crear usuario con estado
+    @PostMapping
+    public String crearConArchivos(
             @RequestParam("nombre") String nombre,
             @RequestParam("apellido") String apellido,
             @RequestParam("dni") String dni,
@@ -94,8 +56,9 @@ public class UsuarioController {
             @RequestParam("mail") String mail,
             @RequestParam("pass") String pass,
             @RequestParam("telefono") String telefono,
-            @RequestParam("comentario") String comentario
-            // Eliminamos: programa, estado, perfil, funcion, reporta
+            @RequestParam("comentario") String comentario,
+            @RequestParam("estadoId") Long estadoId,
+            RedirectAttributes redirectAttributes
     ) {
         try {
             Usuario nuevo = new Usuario();
@@ -109,13 +72,19 @@ public class UsuarioController {
             nuevo.setTelefono(telefono);
             nuevo.setComentario(comentario);
 
-            Usuario guardado = usuarioRepository.save(nuevo);
-            return ResponseEntity.ok("Usuario creado correctamente");
+            Estado estado = estadoRepository.findById(estadoId)
+                    .orElseThrow(() -> new IllegalArgumentException("Estado no encontrado"));
+            nuevo.setEstado(estado);
 
+            usuarioRepository.save(nuevo);
+
+            redirectAttributes.addFlashAttribute("exito", "Usuario creado correctamente.");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al crear usuario: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error al crear usuario: " + e.getMessage());
         }
+
+        return "redirect:/api/usuarios/nuevo";
     }
 
-
+    // Otros métodos existentes (foto, pdf, getById, etc.) los dejás como están...
 }

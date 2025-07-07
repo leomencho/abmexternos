@@ -33,6 +33,11 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<EstadoUsuarioPrograma> estadoPrograma;
 
+    @ManyToOne
+    @JoinColumn(name = "estado_id") // este será el nombre de la FK en la tabla usuarios
+    private Estado estado;
+
+
     // 👉 Funcion (N:M)
     @ManyToMany
     @JoinTable(
@@ -103,6 +108,14 @@ public class Usuario {
 
     public void setDni(String dni) {
         this.dni = dni;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     public String getCuil() {
@@ -217,13 +230,14 @@ public class Usuario {
                 ", apellido='" + apellido + '\'' +
                 ", dni='" + dni + '\'' +
                 ", cuil='" + cuil + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", comentario='" + comentario + '\'' +
                 ", fechaNacimiento=" + fechaNacimiento +
                 ", mail='" + mail + '\'' +
                 ", foto='" + foto + '\'' +
                 ", pass='" + pass + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", comentario='" + comentario + '\'' +
                 ", estadoPrograma=" + estadoPrograma +
+                ", estado=" + estado +
                 ", funciones=" + funciones +
                 ", reporta=" + reporta +
                 ", perfiles=" + perfiles +

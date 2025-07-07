@@ -10,6 +10,18 @@
 <section layout:fragment="content">
   <div class="container mt-4">
     <h2 class="mb-4">Nuevo Registro</h2>
+    <!-- Mensajes de éxito o error -->
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${exito}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+
+
 
     <form method="post" action="/api/usuarios" class="row g-3">
 
@@ -60,6 +72,17 @@
       <div class="col-md-3">
         <label class="form-label">Contraseña</label>
         <input type="password" name="pass" maxlength="50" class="form-control" required>
+      </div>
+      <!-- Estado -->
+      <div class="col-md-4">
+        <label class="form-label">Estado</label>
+        <select name="estadoId" class="form-select" required>
+          <option value="" disabled selected>Seleccione un estado...</option>
+          <option th:each="estado : ${estados}"
+                  th:value="${estado.idestado}"
+                  th:text="${estado.tipoestado}">
+          </option>
+        </select>
       </div>
 
       <!-- Comentario -->
