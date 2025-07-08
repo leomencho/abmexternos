@@ -3,81 +3,71 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-  <title>Nuevo Registro</title>
+  <title>Nuevo Usuario</title>
 </head>
 
 <body>
 <section layout:fragment="content">
   <div class="container mt-4">
-    <h2 class="mb-4">Nuevo Registro</h2>
+    <h2 class="mb-4">Nuevo Usuario</h2>
+
     <!-- Mensajes de éxito o error -->
-    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
-      <span th:text="${exito}"></span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-    </div>
+    <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-      <span th:text="${error}"></span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-    </div>
+    <form method="post" th:action="@{/api/usuarios}" th:object="${usuario}" class="row g-3">
 
+      <!-- Campo oculto para ID -->
+      <input type="hidden" th:field="*{idUsuarios}" />
 
-
-    <form method="post" action="/api/usuarios" class="row g-3">
-
-      <!-- Foto con preview --> <!--
-      <div class="col-12 text-center">
-        <label class="form-label d-block">Foto de Perfil</label>
-        <label for="fotoInput">
-          <img id="fotoPreview" src="/default-avatar.png" alt="Foto" class="img-thumbnail"
-               style="width:150px; height:150px; object-fit:cover; cursor:pointer;">
-        </label>
-        <input type="file" id="fotoInput" name="foto" class="d-none" onchange="previewFoto(this)">
-      </div> -->
-
-      <!-- Nombre y Apellido -->
+      <!-- Nombre -->
       <div class="col-md-6">
         <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" maxlength="50" class="form-control" required>
+        <input type="text" th:field="*{nombre}" class="form-control" maxlength="50" required />
       </div>
+
+      <!-- Apellido -->
       <div class="col-md-6">
         <label class="form-label">Apellido</label>
-        <input type="text" name="apellido" maxlength="50" class="form-control" required>
+        <input type="text" th:field="*{apellido}" class="form-control" maxlength="50" required />
       </div>
 
-      <!-- DNI, CUIL, Fecha -->
+      <!-- DNI -->
       <div class="col-md-4">
         <label class="form-label">DNI</label>
-        <input type="number" name="dni" maxlength="11" class="form-control" required>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">CUIL</label>
-        <input type="text" name="cuil" pattern="\d{2}-\d{8}-\d" class="form-control" placeholder="XX-XXXXXXXX-X" required>
-      </div>
-      <!-- Fecha de Nacimiento -->
-      <div class="col-md-3">
-        <label class="form-label">Fecha de Nacimiento</label>
-        <input type="date" name="fecha_nac" class="form-control" required>
+        <input type="text" th:field="*{dni}" class="form-control" maxlength="11" required />
       </div>
 
-      <!-- Teléfono, Email y Contraseña en la misma fila -->
-      <div class="col-md-3">
-        <label class="form-label">Teléfono</label>
-        <input type="text" name="telefono" maxlength="20" class="form-control" placeholder="Ej: +54 9 351 1234567">
+      <!-- CUIL -->
+      <div class="col-md-4">
+        <label class="form-label">CUIL</label>
+        <input type="text" th:field="*{cuil}" class="form-control" placeholder="XX-XXXXXXXX-X" required />
       </div>
+
+      <!-- Fecha de nacimiento -->
+      <div class="col-md-4">
+        <label class="form-label">Fecha de Nacimiento</label>
+        <input type="date" th:field="*{fechaNacimiento}" class="form-control" required />
+      </div>
+
+      <!-- Teléfono -->
+      <div class="col-md-4">
+        <label class="form-label">Teléfono</label>
+        <input type="text" th:field="*{telefono}" class="form-control" maxlength="20" />
+      </div>
+
+      <!-- Mail -->
       <div class="col-md-4">
         <label class="form-label">Email</label>
-        <input type="email" name="mail" maxlength="50" class="form-control" required>
+        <input type="email" th:field="*{mail}" class="form-control" maxlength="50" required />
       </div>
-      <div class="col-md-3">
-        <label class="form-label">Contraseña</label>
-        <input type="password" name="pass" maxlength="50" class="form-control" required>
-      </div>
+
+
       <!-- Estado -->
       <div class="col-md-4">
         <label class="form-label">Estado</label>
-        <select name="estadoId" class="form-select" required>
-          <option value="" disabled selected>Seleccione un estado...</option>
+        <select th:field="*{estado.idestado}" class="form-select" required>
+          <option value="" disabled>Seleccione un estado...</option>
           <option th:each="estado : ${estados}"
                   th:value="${estado.idestado}"
                   th:text="${estado.tipoestado}">
@@ -88,50 +78,19 @@
       <!-- Comentario -->
       <div class="col-md-12">
         <label class="form-label">Comentario</label>
-        <textarea name="comentario" class="form-control" rows="3" maxlength="500" placeholder="Ingrese un comentario adicional si lo desea..."></textarea>
+        <textarea th:field="*{comentario}" class="form-control" rows="3" maxlength="500"></textarea>
       </div>
 
-      <!-- Botón -->
-      <div class="col-12 mt-3">
+      <!-- Botón Guardar -->
+      <div class="col-12">
         <button type="submit" class="btn btn-primary px-4">Guardar</button>
       </div>
 
     </form>
   </div>
 
-  <script>
-    function previewFoto(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('fotoPreview').src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-  </script>
-  <script>
-    document.querySelector("form").addEventListener("submit", function (e) {
-      const data = new FormData(this);
-      for (const [key, value] of data.entries()) {
-        console.log("🚨 Campo enviado:", key, value);
-      }
-    });
-  </script>
-  <script>
-    document.querySelector("form").addEventListener("submit", function (e) {
-      const inputs = this.querySelectorAll("input[type='file']");
-      inputs.forEach(input => {
-        if (input.name === "attachment") {
-          input.remove(); // borra el input que causa conflicto
-          console.log("❌ Eliminado input 'attachment'");
-        }
-      });
-    });
-  </script>
   <!-- Footer -->
   <div th:replace="fragments/footer :: footer"></div>
-
 </section>
 </body>
 </html>

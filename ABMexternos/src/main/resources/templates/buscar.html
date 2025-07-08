@@ -9,58 +9,78 @@
 <body>
 <section layout:fragment="content">
     <div class="container mt-4">
-        <h2 class="mb-4">Buscar Registro</h2>
+        <h2 class="mb-4">Buscar Usuario</h2>
 
         <form method="get" action="/buscar" class="row g-3">
 
+
             <!-- Apellido -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">Apellido</label>
                 <input type="text" name="apellido" class="form-control" placeholder="Ingrese Apellido" maxlength="50">
             </div>
 
             <!-- Nombre -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">Nombre</label>
                 <input type="text" name="nombre" class="form-control" placeholder="Ingrese Nombre" maxlength="50">
             </div>
 
             <!-- DNI -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">DNI</label>
                 <input type="text" name="dni" class="form-control" placeholder="Ingrese DNI" maxlength="11">
             </div>
 
-
             <!-- Botón de búsqueda -->
-            <div class="col-12 mt-4 text-center">
-                <button type="submit" class="btn btn-primary btn-lg px-5">Buscar</button>
+            <div class="col-12 mt-3 text-center">
+                <button type="submit" class="btn btn-primary px-5">Buscar</button>
             </div>
         </form>
     </div>
 
-    <div class="mt-5">
+    <div class="container mt-5">
         <h4>Resultados</h4>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>DNI</th>
-                <th>Email</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="u : ${usuarios}">
-                <td th:text="${u.nombre}">Nombre</td>
-                <td th:text="${u.apellido}">Apellido</td>
-                <td th:text="${u.dni}">DNI</td>
-                <td th:text="${u.mail}">Email</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>CUIL</th>
+                    <th>Fecha Nac.</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Comentario</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="u : ${usuarios}">
+                    <td th:text="${u.nombre}"></td>
+                    <td th:text="${u.apellido}"></td>
+                    <td th:text="${u.dni}"></td>
+                    <td th:text="${u.cuil}"></td>
+                    <td th:text="${#temporals.format(u.fechaNacimiento, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${u.telefono}"></td>
+                    <td th:text="${u.mail}"></td>
+                    <td th:text="${u.comentario}"></td>
+                    <td th:text="${u.estado != null ? u.estado.tipoestado : '—'}"></td>
+                    <td class="text-center">
+                        <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuarios})}" class="btn btn-sm btn-warning me-1 rounded-circle" title="Editar">✏️</a>
+                        <a th:href="@{/usuarios/eliminar/{id}(id=${u.idUsuarios})}" class="btn btn-sm btn-danger rounded-circle" title="Eliminar"
+                           onclick="return confirm('¿Eliminar este usuario?')">🗑️</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
 </section>
 </body>
 </html>

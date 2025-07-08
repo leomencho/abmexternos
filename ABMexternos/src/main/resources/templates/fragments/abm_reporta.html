@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Gestión de Reporte</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+  <div class="container mt-4">
+
+    <!-- Formulario -->
+    <div class="card shadow-sm rounded-4 p-4 mb-4">
+      <h4 class="text-primary mb-4">👤 Gestión de Reporta</h4>
+
+      <form th:action="@{/reporta}" method="post" th:object="${reporta}" class="row g-4">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Nombre</label>
+          <input type="text" th:field="*{nombre}" class="form-control" required />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Apellido</label>
+          <input type="text" th:field="*{apellido}" class="form-control" required />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Correo</label>
+          <input type="email" th:field="*{correo}" class="form-control" required />
+        </div>
+
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" class="btn btn-success px-4">
+            💾 Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card shadow-sm rounded-4 p-4">
+      <h5 class="text-secondary mb-3">📋 Listado de Reportas</h5>
+
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="r : ${listaReporta}">
+            <td th:text="${r.id}">1</td>
+            <td th:text="${r.nombre}">Nombre</td>
+            <td th:text="${r.apellido}">Apellido</td>
+            <td th:text="${r.correo}">correo@example.com</td>
+            <td class="text-center">
+              <a th:href="@{'/reporta/editar/' + ${r.id}}"
+                 class="btn btn-sm btn-warning me-1 rounded-circle" title="Editar">✏️</a>
+              <a th:href="@{'/reporta/eliminar/' + ${r.id}}"
+                 class="btn btn-sm btn-danger rounded-circle" title="Eliminar"
+                 onclick="return confirm('¿Eliminar este registro?')">🗑️</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div th:replace="fragments/footer :: footer"></div>
+</section>
+</body>
+</html>

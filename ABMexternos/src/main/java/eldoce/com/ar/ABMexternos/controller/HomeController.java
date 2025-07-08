@@ -1,24 +1,21 @@
 package eldoce.com.ar.ABMexternos.controller;
 
-
-import eldoce.com.ar.ABMexternos.repository.EstadoRepository;
-import eldoce.com.ar.ABMexternos.repository.FuncionRepository;
-import eldoce.com.ar.ABMexternos.repository.ProgramaRepository;
-import eldoce.com.ar.ABMexternos.repository.UsuarioRepository;
+import eldoce.com.ar.ABMexternos.model.Reporta;
+import eldoce.com.ar.ABMexternos.model.Usuario;
+import eldoce.com.ar.ABMexternos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Collections;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class HomeController {
 
     @Autowired
     private ProgramaRepository programaRepository;
+
+    @Autowired
+    private ReportaRepository reportaRepository;
 
     @Autowired
     private FuncionRepository funcionRepository;
@@ -37,27 +34,31 @@ public class HomeController {
 
     @GetMapping("/nuevo")
     public String nuevoUsuario(Model model) {
+        model.addAttribute("usuario", new Usuario());
         model.addAttribute("programas", programaRepository.findAll());
         model.addAttribute("funciones", funcionRepository.findAll());
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("estados", estadoRepository.findAll());
-        model.addAttribute("archivos", List.of()); // opcional, si no hay archivos
-        model.addAttribute("usuarioId", 0); // o el ID si estás editando
         return "nuevo";
     }
 
-
-
-    @GetMapping("/modificar")
-    public String modificar(Model model) {
-        //model.addAttribute("usuario", new Usuario());
-        model.addAttribute("programas", Collections.emptyList());
-        model.addAttribute("funciones", Collections.emptyList());
-        model.addAttribute("usuarios", Collections.emptyList());
-        return "modificar";
+    @GetMapping("/editar/{id}")
+    public String editarUsuario(@PathVariable Long id, Model model) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("programas", programaRepository.findAll());
+        model.addAttribute("funciones", funcionRepository.findAll());
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+        model.addAttribute("estados", estadoRepository.findAll());
+        return "nuevo";
     }
 
-
-
+    @GetMapping("/reporta1")
+    public String abmReporta(Model model) {
+        model.addAttribute("partialView", "fragments/abm_reporta");
+        model.addAttribute("reporta", new Reporta());
+        model.addAttribute("listaReporta", reportaRepository.findAll());
+        return "index";
+    }
 
 }
