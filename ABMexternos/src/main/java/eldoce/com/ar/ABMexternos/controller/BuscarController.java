@@ -2,12 +2,12 @@ package eldoce.com.ar.ABMexternos.controller;
 
 import eldoce.com.ar.ABMexternos.model.Estado;
 import eldoce.com.ar.ABMexternos.model.Usuario;
-import eldoce.com.ar.ABMexternos.repository.EstadoRepository;
-import eldoce.com.ar.ABMexternos.repository.UsuarioRepository;
+import eldoce.com.ar.ABMexternos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -19,6 +19,21 @@ public class BuscarController {
 
     @Autowired
     private EstadoRepository estadoRepository;
+
+    @Autowired
+    private ReportaRepository reportaRepository;
+
+    @Autowired
+    private FuncionRepository funcionRepository;
+
+    @Autowired
+    private RecursoRepository recursoRepository;
+
+    @Autowired
+    private ProgramaRepository programaRepository;
+
+
+
 
     @GetMapping("/buscar")
     public String buscarUsuarios(
@@ -46,6 +61,10 @@ public class BuscarController {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow();
         model.addAttribute("usuario", usuario);
         model.addAttribute("estados", estadoRepository.findAll());
+        model.addAttribute("recursos", recursoRepository.findAll());
+        model.addAttribute("reportas", reportaRepository.findAll());
+        model.addAttribute("funciones", funcionRepository.findAll());
+        model.addAttribute("programas", programaRepository.findAll());
         return "nuevo"; // usa el formulario de alta para editar
     }
 
@@ -58,8 +77,18 @@ public class BuscarController {
     }
 
     @GetMapping("/usuarios/eliminar/{id}")
-    public String eliminarUsuario(@PathVariable Long id) {
-        usuarioRepository.deleteById(id);
+    public String eliminarUsuario(@PathVariable Long id, RedirectAttributes redirect) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+
+        // Limpiar relaciones muchos a muchos antes de borrar
+        usuario.getReporta().clear();
+        usuario.getProgramas().clear();
+        usuario.getRecursos().clear();
+        usuarioRepository.save(usuario);
+
+        usuarioRepository.delete(usuario);
+        redirect.addFlashAttribute("exito", "Usuario eliminado correctamente");
         return "redirect:/buscar";
     }
+
 }

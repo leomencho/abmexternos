@@ -1,6 +1,9 @@
 package eldoce.com.ar.ABMexternos.model;
 
+import eldoce.com.ar.ABMexternos.validation.MinEdad;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +25,9 @@ public class Usuario {
     @Column(length = 500)
     private String comentario;
 
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Past(message = "La fecha debe ser en el pasado")
+    @MinEdad(18) // <-- esta es personalizada, la creamos abajo
     @Column(name = "fnac")
     private LocalDate fechaNacimiento;
 

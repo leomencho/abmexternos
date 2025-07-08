@@ -56,6 +56,7 @@ public class HomeController {
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("estados", estadoRepository.findAll());
         model.addAttribute("recursos", recursoRepository.findAll());
+        model.addAttribute("reportas", reportaRepository.findAll());
         return "nuevo";
     }
 
