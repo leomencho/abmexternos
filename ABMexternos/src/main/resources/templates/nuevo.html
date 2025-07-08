@@ -75,6 +75,38 @@
         </select>
       </div>
 
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Recursos</label>
+        <select th:field="*{recursos}" class="form-select" multiple size="5">
+          <option th:each="r : ${recursos}"
+                  th:value="${r.id}"
+                  th:text="${r.nombre}">
+          </option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Programas</label>
+        <select class="form-select" th:field="*{programas}" multiple>
+          <option th:each="p : ${programas}" th:value="${p.idprograma}" th:text="${p.nombreCorto}"></option>
+        </select>
+
+        <div class="mt-2">
+          <span th:each="p : *{programas}" th:text="${p.nombreCorto}" class="badge bg-secondary me-1 mb-1"></span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Reporta</label>
+        <select class="form-select" th:field="*{reporta}" multiple>
+          <option th:each="r : ${reportas}" th:value="${r.id}" th:text="${r.nombre + ' ' + r.apellido}"></option>
+        </select>
+
+        <div class="mt-2">
+          <span th:each="r : *{reporta}" th:text="${r.nombre + ' ' + r.apellido}" class="badge bg-warning text-dark me-1 mb-1"></span>
+        </div>
+      </div>
+
+
+
       <!-- Comentario -->
       <div class="col-md-12">
         <label class="form-label">Comentario</label>

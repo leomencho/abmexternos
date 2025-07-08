@@ -12,8 +12,6 @@
         <h2 class="mb-4">Buscar Usuario</h2>
 
         <form method="get" action="/buscar" class="row g-3">
-
-
             <!-- Apellido -->
             <div class="col-md-4">
                 <label class="form-label">Apellido</label>
@@ -54,6 +52,9 @@
                     <th>Email</th>
                     <th>Comentario</th>
                     <th>Estado</th>
+                    <th>Recursos</th>
+                    <th>Reporta</th>
+                    <th>Programas</th>
                     <th class="text-center">Acciones</th>
                 </tr>
                 </thead>
@@ -68,6 +69,28 @@
                     <td th:text="${u.mail}"></td>
                     <td th:text="${u.comentario}"></td>
                     <td th:text="${u.estado != null ? u.estado.tipoestado : '—'}"></td>
+
+                    <!-- Recursos -->
+                    <td>
+                        <span th:each="r : ${u.recursos}"
+                              th:text="${r.nombre}"
+                              class="badge bg-info text-dark me-1 mb-1"></span>
+                    </td>
+
+                    <!-- Reporta -->
+                    <td>
+                        <span th:each="rep : ${u.reporta}"
+                              th:text="${rep.nombre + ' ' + rep.apellido}"
+                              class="badge bg-warning text-dark me-1 mb-1"></span>
+                    </td>
+
+                    <!-- Programas -->
+                    <td>
+                        <span th:each="p : ${u.programas}"
+                              th:text="${p.nombreCorto}"
+                              class="badge bg-secondary me-1 mb-1"></span>
+                    </td>
+
                     <td class="text-center">
                         <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuarios})}" class="btn btn-sm btn-warning me-1 rounded-circle" title="Editar">✏️</a>
                         <a th:href="@{/usuarios/eliminar/{id}(id=${u.idUsuarios})}" class="btn btn-sm btn-danger rounded-circle" title="Eliminar"

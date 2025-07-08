@@ -26,6 +26,9 @@ public class HomeController {
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Autowired
+    private RecursoRepository recursoRepository;
+
     @GetMapping("/")
     public String index(@RequestParam(required = false, defaultValue = "nuevo") String view, Model model) {
         model.addAttribute("partialView", view);
@@ -39,6 +42,8 @@ public class HomeController {
         model.addAttribute("funciones", funcionRepository.findAll());
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("estados", estadoRepository.findAll());
+        model.addAttribute("recursos", recursoRepository.findAll());
+        model.addAttribute("reportas", reportaRepository.findAll()); // <--- agregar esto
         return "nuevo";
     }
 
@@ -50,6 +55,7 @@ public class HomeController {
         model.addAttribute("funciones", funcionRepository.findAll());
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("estados", estadoRepository.findAll());
+        model.addAttribute("recursos", recursoRepository.findAll());
         return "nuevo";
     }
 

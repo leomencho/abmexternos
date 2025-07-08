@@ -29,9 +29,17 @@ public class Usuario {
     private String mail;
     private String foto;
     private String pass;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "Usuarios_has_Programas",
+            joinColumns = @JoinColumn(name = "idUsuarios"),
+            inverseJoinColumns = @JoinColumn(name = "idPrograma")
+    )
+    private List<Programa> programas;
     // 👉 NUEVO: relación con tabla intermedia EstadoUsuarioPrograma
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<EstadoUsuarioPrograma> estadoPrograma;
+
 
     @ManyToOne
     @JoinColumn(name = "estado_id") // este será el nombre de la FK en la tabla usuarios
@@ -102,6 +110,14 @@ public class Usuario {
         this.apellido = apellido;
     }
 
+    public List<Programa> getProgramas() {
+        return programas;
+    }
+
+    public void setProgramas(List<Programa> programas) {
+        this.programas = programas;
+    }
+
     public String getDni() {
         return dni;
     }
@@ -158,13 +174,6 @@ public class Usuario {
         this.pass = pass;
     }
 
-    public List<EstadoUsuarioPrograma> getEstadoPrograma() {
-        return estadoPrograma;
-    }
-
-    public void setEstadoPrograma(List<EstadoUsuarioPrograma> estadoPrograma) {
-        this.estadoPrograma = estadoPrograma;
-    }
 
     public List<Funcion> getFunciones() {
         return funciones;
@@ -236,7 +245,7 @@ public class Usuario {
                 ", mail='" + mail + '\'' +
                 ", foto='" + foto + '\'' +
                 ", pass='" + pass + '\'' +
-                ", estadoPrograma=" + estadoPrograma +
+                ", programas=" + programas +
                 ", estado=" + estado +
                 ", funciones=" + funciones +
                 ", reporta=" + reporta +
