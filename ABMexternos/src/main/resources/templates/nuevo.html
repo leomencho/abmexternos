@@ -15,26 +15,34 @@
     <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <!--<form method="post" th:action="@{/api/usuarios}" th:object="${usuario}" class="row g-3">-->
     <form method="post"
           th:action="@{/api/usuarios}"
           th:object="${usuario}"
           class="row g-3"
           enctype="multipart/form-data">
 
-
-    <!-- Campo oculto para ID -->
+      <!-- Campo oculto para ID -->
       <input type="hidden" th:field="*{idUsuarios}" />
 
-
+      <!-- Foto de perfil -->
       <div class="mb-3">
         <label for="archivoFoto" class="form-label">Foto de perfil</label>
         <input type="file" name="archivoFoto" id="archivoFoto" class="form-control" accept="image/*" onchange="mostrarPreview(this)">
       </div>
 
-      <!-- Preview -->
+      <!-- Preview de imagen -->
       <div class="mb-3">
-        <img id="previewImagen" src="#" alt="Previsualización" style="display:none; max-height: 200px;" />
+        <img id="previewImagen"
+             th:if="${usuario.foto != null}"
+             th:src="@{${usuario.foto}}"
+             alt="Previsualización"
+             style="max-height: 200px;" />
+
+        <img id="previewImagen"
+             th:if="${usuario.foto == null}"
+             src="#"
+             alt="Previsualización"
+             style="display: none; max-height: 200px;" />
       </div>
 
       <!-- Nombre -->
@@ -73,12 +81,11 @@
         <input type="text" th:field="*{telefono}" class="form-control" maxlength="20" />
       </div>
 
-      <!-- Mail -->
+      <!-- Email -->
       <div class="col-md-4">
         <label class="form-label">Email</label>
         <input type="email" th:field="*{mail}" class="form-control" maxlength="50" required />
       </div>
-
 
       <!-- Estado -->
       <div class="col-md-4">
@@ -92,6 +99,7 @@
         </select>
       </div>
 
+      <!-- Recursos -->
       <div class="col-md-4">
         <label class="form-label fw-bold">Recursos</label>
         <select th:field="*{recursos}" class="form-select" multiple size="5">
@@ -101,7 +109,21 @@
           </option>
         </select>
       </div>
-      <div class="col-md-4">
+      <!-- Funciones -->
+      <div class="col-md-2">
+        <label class="form-label">Funciones</label>
+        <select th:field="*{funciones}" class="form-select" multiple>
+          <option th:each="f : ${funciones}" th:value="${f.id}" th:text="${f.nombre}"></option>
+        </select>
+
+        <div class="mt-2">
+          <span th:each="f : *{funciones}" th:text="${f.nombre}" class="badge bg-info text-dark me-1 mb-1"></span>
+        </div>
+      </div>
+
+
+      <!-- Programas -->
+      <div class="col-md-3">
         <label class="form-label">Programas</label>
         <select class="form-select" th:field="*{programas}" multiple>
           <option th:each="p : ${programas}" th:value="${p.idprograma}" th:text="${p.nombreCorto}"></option>
@@ -111,6 +133,8 @@
           <span th:each="p : *{programas}" th:text="${p.nombreCorto}" class="badge bg-secondary me-1 mb-1"></span>
         </div>
       </div>
+
+      <!-- Reporta -->
       <div class="col-md-4">
         <label class="form-label">Reporta</label>
         <select class="form-select" th:field="*{reporta}" multiple>
@@ -121,8 +145,6 @@
           <span th:each="r : *{reporta}" th:text="${r.nombre + ' ' + r.apellido}" class="badge bg-warning text-dark me-1 mb-1"></span>
         </div>
       </div>
-
-
 
       <!-- Comentario -->
       <div class="col-md-12">
@@ -141,6 +163,8 @@
   <!-- Footer -->
   <div th:replace="fragments/footer :: footer"></div>
 </section>
+
+<!-- Preview dinámica -->
 <script>
   function mostrarPreview(input) {
     const preview = document.getElementById('previewImagen');
