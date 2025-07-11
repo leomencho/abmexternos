@@ -55,6 +55,7 @@
                     <th>Recursos</th>
                     <th>Reporta</th>
                     <th>Programas</th>
+                    <th>Foto</th> <!-- Nueva columna -->
                     <th class="text-center">Acciones</th>
                 </tr>
                 </thead>
@@ -91,6 +92,17 @@
                               class="badge bg-secondary me-1 mb-1"></span>
                     </td>
 
+                    <!-- Foto -->
+                    <td>
+                        <img th:src="@{${u.foto != null} ? '/' + ${u.foto} : '/images/default.jpeg'}"
+                             style="max-width:70px; max-height:70px;" alt="Foto de perfil" />
+
+
+                    </td>
+
+                    </td>
+
+                    <!-- Acciones -->
                     <td class="text-center">
                         <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuarios})}" class="btn btn-sm btn-warning me-1 rounded-circle" title="Editar">✏️</a>
                         <a th:href="@{/usuarios/eliminar/{id}(id=${u.idUsuarios})}" class="btn btn-sm btn-danger rounded-circle" title="Eliminar"

@@ -15,10 +15,27 @@
     <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <form method="post" th:action="@{/api/usuarios}" th:object="${usuario}" class="row g-3">
+    <!--<form method="post" th:action="@{/api/usuarios}" th:object="${usuario}" class="row g-3">-->
+    <form method="post"
+          th:action="@{/api/usuarios}"
+          th:object="${usuario}"
+          class="row g-3"
+          enctype="multipart/form-data">
 
-      <!-- Campo oculto para ID -->
+
+    <!-- Campo oculto para ID -->
       <input type="hidden" th:field="*{idUsuarios}" />
+
+
+      <div class="mb-3">
+        <label for="archivoFoto" class="form-label">Foto de perfil</label>
+        <input type="file" name="archivoFoto" id="archivoFoto" class="form-control" accept="image/*" onchange="mostrarPreview(this)">
+      </div>
+
+      <!-- Preview -->
+      <div class="mb-3">
+        <img id="previewImagen" src="#" alt="Previsualización" style="display:none; max-height: 200px;" />
+      </div>
 
       <!-- Nombre -->
       <div class="col-md-6">
@@ -124,5 +141,23 @@
   <!-- Footer -->
   <div th:replace="fragments/footer :: footer"></div>
 </section>
+<script>
+  function mostrarPreview(input) {
+    const preview = document.getElementById('previewImagen');
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      }
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      preview.src = '#';
+      preview.style.display = 'none';
+    }
+  }
+</script>
+
 </body>
 </html>

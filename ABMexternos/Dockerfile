@@ -1,8 +1,15 @@
-FROM eclipse-temurin:21-jdk
-WORKDIR /app
+# Dockerfile
+FROM tomcat:10.1
 
-COPY target/ABMexternos-0.0.3.jar app.jar
+# Eliminar apps por defecto
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-EXPOSE 8088
+# Copiar WAR
+COPY target/ABMexternos.war /usr/local/tomcat/webapps/ROOT.war
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Copiar archivos estáticos (imágenes y pdfs)
+COPY images /usr/local/tomcat/images/
+COPY pdfs /usr/local/tomcat/pdfs/
+
+# Exponer el puerto de Tomcat
+EXPOSE 8080
