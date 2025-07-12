@@ -3,8 +3,7 @@ package eldoce.com.ar.ABMexternos.controller;
 import eldoce.com.ar.ABMexternos.Utileria;
 import eldoce.com.ar.ABMexternos.model.Estado;
 import eldoce.com.ar.ABMexternos.model.Usuario;
-import eldoce.com.ar.ABMexternos.repository.EstadoRepository;
-import eldoce.com.ar.ABMexternos.repository.UsuarioRepository;
+import eldoce.com.ar.ABMexternos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,9 +12,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
+
+    @Value("${app.upload.dir}")
+    private String uploadDir;
+
+    @Autowired
+    private ProgramaRepository programaRepository;
+
+    @Autowired
+    private ReportaRepository reportaRepository;
+
+    @Autowired
+    private FuncionRepository funcionRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -23,8 +36,8 @@ public class UsuarioController {
     @Autowired
     private EstadoRepository estadoRepository;
 
-    @Value("${app.upload.dir}")
-    private String uploadDir;
+    @Autowired
+    private RecursoRepository recursoRepository;
 
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(@RequestParam(value = "id", required = false) Long id, Model model) {
@@ -34,7 +47,11 @@ public class UsuarioController {
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("estados", estadoRepository.findAll());
-        // otras listas como recursos, programas, etc.
+        model.addAttribute("recursos", recursoRepository.findAll());  // si lo tenés
+        model.addAttribute("programas", programaRepository.findAll()); // idem
+        model.addAttribute("reportas", reportaRepository.findAll()); // idem
+        model.addAttribute("funciones", funcionRepository.findAll()); // ⚠️ ESTA LÍNEA
+
         return "nuevo";
     }
 
@@ -77,6 +94,17 @@ public class UsuarioController {
         }
 
         return "redirect:/buscar";
+    }
+
+    @GetMapping("/ver")
+    public String verUsuario(@RequestParam("id") Long id, Model model) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isPresent()) {
+            model.addAttribute("usuario", usuarioOpt.get());
+            return "ver";
+        } else {
+            return "redirect:/buscar";
+        }
     }
 
 

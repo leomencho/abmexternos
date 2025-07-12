@@ -110,14 +110,20 @@
         </select>
       </div>
       <!-- Funciones -->
-      <div class="col-md-2">
+      <div class="col-md-4">
         <label class="form-label">Funciones</label>
         <select th:field="*{funciones}" class="form-select" multiple>
-          <option th:each="f : ${funciones}" th:value="${f.id}" th:text="${f.nombre}"></option>
+          <option th:each="f : ${funciones}"
+                  th:value="${f.idfunciones}"
+                  th:text="${f.nombre}">
+          </option>
         </select>
 
         <div class="mt-2">
-          <span th:each="f : *{funciones}" th:text="${f.nombre}" class="badge bg-info text-dark me-1 mb-1"></span>
+    <span th:each="f : *{funciones}"
+          th:text="${f.nombre}"
+          class="badge bg-info text-dark me-1 mb-1">
+    </span>
         </div>
       </div>
 

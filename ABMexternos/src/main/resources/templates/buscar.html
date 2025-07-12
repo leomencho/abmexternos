@@ -6,52 +6,106 @@
 <body>
 <section layout:fragment="content">
     <div class="container mt-4">
-        <h2>Buscar Usuarios</h2>
+        <h2 class="mb-4">Buscar Usuarios</h2>
 
-        <!-- Formulario de búsqueda -->
+        <!-- Formulario de búsqueda (si usás filtros, agregalos aquí) -->
         <form method="get" th:action="@{/buscar}" class="row g-3 mb-4">
-            <!-- Campos de búsqueda -->
-            <!-- ... tus filtros actuales (nombre, apellido, etc) ... -->
+            <!-- Ejemplo de filtros si lo necesitás -->
+            <!-- <div class="col-md-4"><input type="text" name="nombre" class="form-control" placeholder="Nombre"></div> -->
+            <!-- <div class="col-md-2"><button class="btn btn-primary">Buscar</button></div> -->
         </form>
 
         <!-- Tabla de resultados -->
-        <table class="table table-striped">
-            <thead>
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
             <tr>
-                <th>Foto</th>
+                <th rowspan="2" class="text-center align-middle">Foto</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>DNI</th>
                 <th>CUIL</th>
-                <th>Mail</th>
-                <th>Estado</th>
+                <th>Email</th>
                 <th>Acciones</th>
+            </tr>
+            <tr>
+                <th colspan="5">Información adicional</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="usuario : ${usuarios}">
-                <!-- Miniatura -->
-                <td>
+            <tr th:each="usuario : ${usuarios}" th:if="${usuario != null}">
+                <!-- Foto -->
+                <td class="text-center align-middle">
                     <img th:if="${usuario.foto != null}"
                          th:src="@{${usuario.foto}}"
                          alt="Foto"
-                         style="height: 60px;" />
+                         class="rounded"
+                         style="height: 100px; object-fit: cover;" />
                     <span th:if="${usuario.foto == null}">Sin foto</span>
                 </td>
-                <td th:text="${usuario.nombre}">Nombre</td>
-                <td th:text="${usuario.apellido}">Apellido</td>
-                <td th:text="${usuario.dni}">DNI</td>
-                <td th:text="${usuario.cuil}">CUIL</td>
-                <td th:text="${usuario.mail}">Email</td>
-                <td th:text="${usuario.estado.tipoestado}">Estado</td>
-                <td>
-                    <a th:href="@{/api/usuarios/nuevo(id=${usuario.idUsuarios})}" class="btn btn-primary btn-sm">Editar</a>
-                    <a th:href="@{/api/usuarios/eliminar(id=${usuario.idUsuarios})}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</a>
 
+                <!-- Nombre + Estado -->
+                <td>
+                    <div th:text="${usuario.nombre ?: ''}">Nombre</div>
+                    <div th:if="${usuario.estado != null}" class="text-muted small">
+                        <strong>Estado:</strong> <span th:text="${usuario.estado.tipoestado}">Estado</span>
+                    </div>
+                </td>
+
+                <!-- Apellido -->
+                <td th:text="${usuario.apellido ?: ''}">Apellido</td>
+
+                <!-- DNI -->
+                <td th:text="${usuario.dni ?: ''}">DNI</td>
+
+                <!-- CUIL -->
+                <td th:text="${usuario.cuil ?: ''}">CUIL</td>
+
+                <!-- Email + Info adicional -->
+                <td>
+                    <div th:text="${usuario.mail ?: ''}">Email</div>
+
+                    <div th:if="${usuario.recursos != null}">
+                        <strong class="text-muted small">Recursos:</strong>
+                        <th:block th:each="r : ${usuario.recursos}">
+                            <span class="badge bg-secondary me-1 mb-1" th:text="${r.nombre}">Recurso</span>
+                        </th:block>
+                    </div>
+
+                    <div th:if="${usuario.programas != null}">
+                        <strong class="text-muted small">Programas:</strong>
+                        <th:block th:each="p : ${usuario.programas}">
+                            <span class="badge bg-primary me-1 mb-1" th:text="${p.nombreCorto}">Programa</span>
+                        </th:block>
+                    </div>
+
+                    <div th:if="${usuario.reporta != null}">
+                        <strong class="text-muted small">Reporta:</strong>
+                        <th:block th:each="rep : ${usuario.reporta}">
+                <span class="badge bg-warning text-dark me-1 mb-1"
+                      th:text="${rep.nombre + ' ' + rep.apellido}">Reporta</span>
+                        </th:block>
+                    </div>
+
+                    <div th:if="${usuario.funciones != null}">
+                        <strong class="text-muted small">Funciones:</strong>
+                        <th:block th:each="f : ${usuario.funciones}">
+                            <span class="badge bg-info text-dark me-1 mb-1" th:text="${f.nombre}">Función</span>
+                        </th:block>
+                    </div>
+                </td>
+
+                <!-- Acciones -->
+                <td class="text-nowrap">
+                    <a th:href="@{/ver(id=${usuario.idUsuarios})}" class="btn btn-sm btn-info">Ver</a>
+                    <a th:href="@{/nuevo(id=${usuario.idUsuarios})}" class="btn btn-sm btn-primary">Editar</a>
+                    <a th:href="@{/eliminar(id=${usuario.idUsuarios})}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('¿Seguro que desea eliminar este usuario?');">Eliminar</a>
                 </td>
             </tr>
             </tbody>
+
+
         </table>
     </div>
 </section>

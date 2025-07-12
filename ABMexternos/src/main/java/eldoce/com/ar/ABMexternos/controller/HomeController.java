@@ -4,12 +4,18 @@ import eldoce.com.ar.ABMexternos.model.Reporta;
 import eldoce.com.ar.ABMexternos.model.Usuario;
 import eldoce.com.ar.ABMexternos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 public class HomeController {
+
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     @Autowired
     private ProgramaRepository programaRepository;
@@ -36,14 +42,18 @@ public class HomeController {
     }
 
     @GetMapping("/nuevo")
-    public String nuevoUsuario(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        model.addAttribute("programas", programaRepository.findAll());
-        model.addAttribute("funciones", funcionRepository.findAll());
-        model.addAttribute("usuarios", usuarioRepository.findAll());
+    public String mostrarFormularioNuevo(@RequestParam(value = "id", required = false) Long id, Model model) {
+        Usuario usuario = (id != null)
+                ? usuarioRepository.findById(id).orElse(new Usuario())
+                : new Usuario();
+
+        model.addAttribute("usuario", usuario);
         model.addAttribute("estados", estadoRepository.findAll());
         model.addAttribute("recursos", recursoRepository.findAll());
-        model.addAttribute("reportas", reportaRepository.findAll()); // <--- agregar esto
+        model.addAttribute("programas", programaRepository.findAll());
+        model.addAttribute("reportas", reportaRepository.findAll());
+        model.addAttribute("funciones", funcionRepository.findAll()); // 👈 esta línea
+
         return "nuevo";
     }
 
@@ -60,12 +70,16 @@ public class HomeController {
         return "nuevo";
     }
 
-    @GetMapping("/reporta1")
-    public String abmReporta(Model model) {
-        model.addAttribute("partialView", "fragments/abm_reporta");
-        model.addAttribute("reporta", new Reporta());
-        model.addAttribute("listaReporta", reportaRepository.findAll());
-        return "index";
+    @GetMapping("/ver")
+    public String verUsuario(@RequestParam("id") Long id, Model model) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isPresent()) {
+            model.addAttribute("usuario", usuarioOpt.get());
+            return "ver";
+        } else {
+            return "redirect:/buscar";
+        }
     }
+
 
 }
